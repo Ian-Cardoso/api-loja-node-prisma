@@ -200,6 +200,10 @@ app.delete('/produtos/:id', async (req, res) => {
     return res.status(200).json(produto)
 })
 
+app.use((req, res) => {
+    return res.status(404).json({ erro: `Rota ${req.method} ${req.path} nao encontrada` })
+})
+
 app.use((err, req, res, next) => {
     if (err.type === 'entity.parse.failed') {
         return res.status(400).json({ erro: `JSON invalido no body` })
