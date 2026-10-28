@@ -9,6 +9,17 @@ API REST feita com **Node.js**, **Express 5** e **Prisma** (PostgreSQL) para ger
 - Prisma ORM 7 + `@prisma/adapter-pg`
 - PostgreSQL
 
+## Rodando com Docker 
+
+Requisito: Docker Desktop.
+
+```bash
+docker compose up --build
+```
+
+A API sobe em `http://localhost:3000` e o PostgreSQL em `localhost:5433`
+(usuário `postgres`, senha `postgres`, banco `loja`).
+
 ## Como rodar
 
 ```bash
