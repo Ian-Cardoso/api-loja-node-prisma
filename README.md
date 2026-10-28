@@ -4,7 +4,7 @@ API REST feita com **Node.js**, **Express 5** e **Prisma** (PostgreSQL) para ger
 
 ## Tecnologias
 
-- Node.js (ES Modules)
+- Node.js **22.18 ou superior** (ES Modules). O `src/lib/prisma.js` importa um arquivo `.ts`, que só roda direto em versões recentes do Node
 - Express 5
 - Prisma ORM 7 + `@prisma/adapter-pg`
 - PostgreSQL
@@ -22,7 +22,10 @@ npm install
 npx prisma generate
 npx prisma migrate deploy
 
-# 4. Iniciar o servidor
+# 4. (Opcional) Popular o banco com categorias e produtos de exemplo
+npm run seed
+
+# 5. Iniciar o servidor
 npm run dev     # modo watch
 npm start       # modo normal
 ```
