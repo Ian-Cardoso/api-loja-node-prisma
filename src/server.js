@@ -102,7 +102,9 @@ app.get('/produtos', async (req, res) => {
     }
 
     const produtos = await prisma.produto.findMany({
-        where: Object.keys(preco).length ? { preco } : {}
+        where: Object.keys(preco).length ? { preco } : {},
+        include: { categoria: true },
+        orderBy: { id: 'asc' }
     })
 
     return res.status(200).json(produtos)
