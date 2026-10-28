@@ -86,7 +86,7 @@ Retorna todas as categorias.
 
 #### `GET /categorias/:id`
 
-Retorna uma categoria pelo id.
+Retorna uma categoria pelo id, incluindo os produtos dela.
 
 | Status | Significado        |
 | ------ | ------------------ |
@@ -97,7 +97,13 @@ Retorna uma categoria pelo id.
 **Resposta `200`**
 
 ```json
-{ "id": 1, "nome": "Eletrônicos" }
+{
+  "id": 1,
+  "nome": "Eletrônicos",
+  "produtos": [
+    { "id": 1, "nome": "Mouse", "preco": 59.9, "categoriaId": 1 }
+  ]
+}
 ```
 
 #### `POST /categorias`
@@ -133,7 +139,7 @@ Exclui uma categoria pelo id.
 
 #### `GET /produtos`
 
-Lista os produtos. Aceita filtro por faixa de preço via query string.
+Lista os produtos ordenados por id, cada um com sua categoria. Aceita filtro por faixa de preço via query string.
 
 | Query | Tipo   | Descrição    |
 | ----- | ------ | ------------ |
@@ -153,7 +159,13 @@ GET /produtos?min=10&max=100
 
 ```json
 [
-  { "id": 1, "nome": "Mouse", "preco": 59.9, "categoriaId": 1 }
+  {
+    "id": 1,
+    "nome": "Mouse",
+    "preco": 59.9,
+    "categoriaId": 1,
+    "categoria": { "id": 1, "nome": "Eletrônicos" }
+  }
 ]
 ```
 
@@ -240,7 +252,7 @@ Todos os erros retornam JSON no formato:
 { "erro": "mensagem" }
 ```
 
-Body com JSON malformado retorna `400` e falhas inesperadas retornam `500`.
+Rotas inexistentes retornam `404`, body com JSON malformado retorna `400` e falhas inesperadas retornam `500`.
 
 ## Estrutura do projeto
 
