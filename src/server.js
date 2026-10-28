@@ -51,16 +51,18 @@ app.post('/categorias', async (req, res) => {
         return res.status(400).json({ erro: `Nome é obrigatorio no body` })
     }
 
+    const nomeLimpo = nome.trim()
+
     const existe = await prisma.categoria.findUnique({
-        where: { nome }
+        where: { nome: nomeLimpo }
     })
 
     if (existe) {
-        return res.status(409).json({ erro: `A categoria ${nome} ja existe` })
+        return res.status(409).json({ erro: `A categoria ${nomeLimpo} ja existe` })
     }
 
     const categoria = await prisma.categoria.create({
-        data: { nome }
+        data: { nome: nomeLimpo }
     })
 
     return res.status(201).json(categoria)
@@ -153,7 +155,7 @@ app.post('/produtos', async (req, res) => {
     }
 
     const produto = await prisma.produto.create({
-        data: { nome, preco, categoriaId }
+        data: { nome: nome.trim(), preco, categoriaId }
     })
 
     return res.status(201).json(produto)
