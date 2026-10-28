@@ -33,7 +33,8 @@ app.get('/categorias/:id', async (req, res) => {
     }
 
     const categoria = await prisma.categoria.findUnique({
-        where: { id }
+        where: { id },
+        include: { produtos: true }
     })
 
     if (!categoria) {
