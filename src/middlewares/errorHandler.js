@@ -16,6 +16,18 @@ export function errorHandler(err, req, res, next) {
     return res.status(err.statusCode).json({ erro: err.message })
   }
 
+  if (err.code === 'P2002') {
+    return res.status(409).json({ erro: 'Já existe um registro com esse nome' })
+  }
+
+  if (err.code === 'P2003') {
+    return res.status(409).json({ erro: 'Operação viola uma relação (ex.: categoria com produtos ou categoria inexistente)' })
+  }
+
+  if (err.code === 'P2025') {
+    return res.status(404).json({ erro: 'Registro não encontrado' })
+  }
+
   if (err.type === 'entity.parse.failed') {
     return res.status(400).json({ erro: 'JSON inválido no body' })
   }

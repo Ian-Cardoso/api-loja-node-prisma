@@ -7,10 +7,10 @@ import {
     atualizarProdutoSchema,
 } from '../schemas/produtos.schema.js'
 
-export async function listarProdutosSchema(req, res) {
+export async function listarProdutos(req, res) {
     const filtros = listarProdutosSchema.parse(req.query)
-    const produto = await produtoService.listarProduto(filtros)
-    return res.json(produto)
+    const produtos = await produtoService.listarProduto(filtros)
+    return res.json(produtos)
 }
 
 export async function buscarPorIdProduto(req, res) {
@@ -19,17 +19,17 @@ export async function buscarPorIdProduto(req, res) {
     return res.json(produto)
 }
 
-export async function criarProdutoSchema(req, res) {
+export async function criarProduto(req, res) {
     const dados = criarProdutoSchema.parse(req.body ?? {})
     const produto = await produtoService.criarProduto(dados)
     return res.status(201).json(produto)
 }
 
-export async function atualizarProdutoSchema(req, res) {
-  const { id } = idParamSchema.parse(req.params)
-  const dados = atualizarProdutoSchema.parse(req.body ?? {})
-  const categoria = await categoriaService.atualizarProdutoSchema(id, dados)
-  return res.json(categoria)
+export async function atualizarProduto(req, res) {
+    const { id } = idParamSchema.parse(req.params)
+    const dados = atualizarProdutoSchema.parse(req.body ?? {})
+    const produto = await produtoService.atualizarProduto(id, dados)
+    return res.json(produto)
 }
 
 export async function removerProduto(req, res) {

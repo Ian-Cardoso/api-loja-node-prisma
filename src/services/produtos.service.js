@@ -1,18 +1,19 @@
 import { prisma } from '../lib/prisma.js';
 import { AppError } from '../errors/AppError.js'
+import { buscarPorIdCategoria } from './categorias.service.js'
 
-export async function listarProduto(min, max) {
+export async function listarProduto({ precoMin, precoMax } = {}) {
     const preco = {}
 
-    if (min !== undefined && !isNaN(min)) {
-        preco.gte = Number(min)
+    if (precoMin !== undefined) {
+        preco.gte = precoMin
     }
 
-    if (max !== undefined && !isNaN(max)) {
-        preco.lte = Number(max)
+    if (precoMax !== undefined) {
+        preco.lte = precoMax
     }
 
-    return await prisma.produto.findMany({
+    return prisma.produto.findMany({
         where: Object.keys(preco).length ? { preco } : {},
         include: { categoria: true },
         orderBy: { id: 'asc' }
@@ -23,7 +24,7 @@ export async function buscarPorIdProduto(id) {
     const produto = await prisma.produto.findUnique({
         where: { id },
         include: { categoria: true }
-    }) 
+    })
     if (!produto) {
         throw new AppError(404, `Produto ${id} não encontrado`)
     }
@@ -32,20 +33,24 @@ export async function buscarPorIdProduto(id) {
 }
 
 export async function criarProduto(dados) {
+    await buscarPorIdCategoria(dados.categoriaId)
     return prisma.produto.create({ data: dados })
 }
 
 export async function atualizarProduto(id, dados) {
-    await buscarPorId(id)
+    await buscarPorIdProduto(id)
+    if (dados.categoriaId !== undefined) {
+        await buscarPorIdCategoria(dados.categoriaId)
+    }
     return prisma.produto.update({
-        where: { id }, 
+        where: { id },
         data: dados
     })
 }
 
 export async function removerProduto(id) {
-    await buscarPorId(id)
+    await buscarPorIdProduto(id)
     return prisma.produto.delete({
-        where: {id}
+        where: { id }
     })
 }
