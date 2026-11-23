@@ -21,19 +21,19 @@ export async function buscarPorIdProduto(req, res) {
 
 export async function criarProduto(req, res) {
     const dados = criarProdutoSchema.parse(req.body ?? {})
-    const produto = await produtoService.criarProduto(dados)
+    const produto = await produtoService.criarProduto(dados, req.usuario)
     return res.status(201).json(produto)
 }
 
 export async function atualizarProduto(req, res) {
     const { id } = idParamSchema.parse(req.params)
     const dados = atualizarProdutoSchema.parse(req.body ?? {})
-    const produto = await produtoService.atualizarProduto(id, dados)
+    const produto = await produtoService.atualizarProduto(id, dados, req.usuario)
     return res.json(produto)
 }
 
 export async function removerProduto(req, res) {
     const { id } = idParamSchema.parse(req.params)
-    await produtoService.removerProduto(id)
+    await produtoService.removerProduto(id, req.usuario)
     return res.status(204).end()
 }

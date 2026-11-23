@@ -32,13 +32,22 @@ export async function buscarPorIdProduto(id) {
     return produto
 }
 
-export async function criarProduto(dados) {
-    await buscarPorIdCategoria(dados.categoriaId)
-    return prisma.produto.create({ data: dados })
+function garantirPermissao(produto, usuario) {
+  const ehDono = produto.criadoPorId === usuario.id
+  const ehAdmin = usuario.papel === 'ADMIN'
+  if (!ehDono && !ehAdmin) {
+    throw new AppError(403, 'Só o dono do produto ou um admin pode fazer isso')
+  }
 }
 
-export async function atualizarProduto(id, dados) {
-    await buscarPorIdProduto(id)
+export async function criarProduto(dados, usuario) {
+    await buscarPorIdCategoria(dados.categoriaId)
+    return prisma.produto.create({ data: {...dados, criadoPorId: usuario.id }, })
+}
+
+export async function atualizarProduto(id, dados, usuario) {
+    const produto = await buscarPorIdProduto(id)
+    garantirPermissao(produto, usuario)
     if (dados.categoriaId !== undefined) {
         await buscarPorIdCategoria(dados.categoriaId)
     }
@@ -48,8 +57,9 @@ export async function atualizarProduto(id, dados) {
     })
 }
 
-export async function removerProduto(id) {
-    await buscarPorIdProduto(id)
+export async function removerProduto(id, usuario) {
+    const produto = await buscarPorIdProduto(id)
+    garantirPermissao(produto, usuario)
     return prisma.produto.delete({
         where: { id }
     })

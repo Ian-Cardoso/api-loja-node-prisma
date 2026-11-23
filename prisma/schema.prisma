@@ -24,12 +24,21 @@ model Produto {
   preco       Float
   categoriaId Int
   categoria   Categoria @relation(fields: [categoriaId], references: [id])
+  criadoPorId Int?
+  criadoPor   Usuario?  @relation(fields: [criadoPorId], references: [id])
+
 }
 
+enum Papel {
+  ADMIN
+  CLIENTE
+}
 model Usuario {
-  id       Int      @id @default(autoincrement())
+  id       Int       @id @default(autoincrement())
   nome     String
-  email    String   @unique
+  email    String    @unique
   senha    String
-  criadoEm DateTime @default(now())
+  papel    Papel     @default(CLIENTE)
+  criadoEm DateTime  @default(now())
+  produtos Produto[]
 }

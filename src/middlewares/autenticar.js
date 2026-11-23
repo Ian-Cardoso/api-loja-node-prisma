@@ -17,6 +17,6 @@ export function autenticar(req, res, next) {
     throw new AppError(401, 'Token inválido ou expirado')
   }
 
-  req.usuario = { id: payload.id }
+  req.usuario = { id: payload.id, papel: payload.papel }
   next()
 }

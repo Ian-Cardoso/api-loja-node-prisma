@@ -1,4 +1,18 @@
 import { prisma } from '../src/lib/prisma.js'
+import bcrypt from 'bcryptjs'
+
+const senhaHash = await bcrypt.hash(process.env.ADMIN_SENHA, 10)
+
+await prisma.usuario.upsert({
+  where: { email: process.env.ADMIN_EMAIL },
+  update: {},
+  create: {
+    nome: 'Administrador',
+    email: process.env.ADMIN_EMAIL,
+    senha: senhaHash,
+    papel: 'ADMIN',
+  },
+})
 
 const categorias = [
     {

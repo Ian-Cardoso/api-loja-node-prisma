@@ -32,7 +32,11 @@ export async function login({ email, senha }) {
         throw new AppError(401, 'E-mail ou senha inválidos')
     }
 
-    const token = jwt.sign({ id: usuario.id }, process.env.JWT_SECRET, { expiresIn: '1d'})
+    const token = jwt.sign(
+  { id: usuario.id, papel: usuario.papel },
+  process.env.JWT_SECRET,
+  { expiresIn: '1d' }
+)
 
     return { token, usuario: semSenha(usuario)}
 }
